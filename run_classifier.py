@@ -268,7 +268,6 @@ class XnliProcessor(DataProcessor):
 
 
 class SnliProcessor(DataProcessor):
-    #TODO class to change for the project
   """Processor for the MultiNLI data set (GLUE version)."""
 
   def get_train_examples(self, data_dir):
@@ -286,8 +285,8 @@ class SnliProcessor(DataProcessor):
   def get_test_examples(self, data_dir):
     """See base class."""
     return self._create_examples(
-        self._read_tsv(os.path.join(data_dir, "test.tsv")), "test")
-        #self._read_csv(os.path.join(data_dir, "snli_test.csv")), "test")
+        #self._read_tsv(os.path.join(data_dir, "test.tsv")), "test")
+        self._read_csv(os.path.join(data_dir, "snli_test.csv")), "test")
 
   def get_labels(self):
     """See base class."""
@@ -312,7 +311,6 @@ class SnliProcessor(DataProcessor):
 
 
 class MnliProcessor(DataProcessor):
-    #TODO class to change for the project
   """Processor for the MultiNLI data set (GLUE version)."""
 
   def get_train_examples(self, data_dir):
@@ -1031,6 +1029,10 @@ def main(_):
         writer.write(output_line)
         num_written_lines += 1
     assert num_written_lines == num_actual_predict_examples
+
+    if FLAGS.do_kaggle_submission:
+      tf.logging.info("***** Creating Kaggle Submission *****")
+      print(result)
 
 
 if __name__ == "__main__":

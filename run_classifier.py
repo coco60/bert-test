@@ -1006,7 +1006,7 @@ def main(_):
                                             FLAGS.max_seq_length, tokenizer,
                                             predict_file)
 
-    tf.logging.info("***** Running prediction*****")
+    tf.logging.info("***** Running prediction *****")
     tf.logging.info("  Num examples = %d (%d actual, %d padding)",
                     len(predict_examples), num_actual_predict_examples,
                     len(predict_examples) - num_actual_predict_examples)
@@ -1038,7 +1038,8 @@ def main(_):
 
     if FLAGS.do_kaggle_submission:
       tf.logging.info("***** Creating Kaggle Submission *****")
-      print(result)
+      for (i, prediction) in enumerate(result):
+          print(probabilities)
 
 
 if __name__ == "__main__":

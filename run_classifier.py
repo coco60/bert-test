@@ -1044,7 +1044,7 @@ def main(_):
 
     if FLAGS.do_kaggle_submission:
       tf.logging.info("***** Creating Kaggle Submission *****")
-
+      result = estimator.predict(input_fn=predict_input_fn)
       with open(os.path.join(FLAGS.output_dir, "kaggle_submission.csv"), mode='w') as sub_file:
           writer = csv.writer(sub_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
           writer.writerow(['id', 'label1'])

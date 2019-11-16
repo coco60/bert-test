@@ -305,13 +305,18 @@ class SnliProcessor(DataProcessor):
     for (i, line) in enumerate(lines):
       if i == 0:
         continue
-      guid = "%s-%s" % (set_type, tokenization.convert_to_unicode(line[3]))
-      text_a = tokenization.convert_to_unicode(line[0])
-      text_b = tokenization.convert_to_unicode(line[1])
+
       if set_type == "test":
         label = "contradiction"
+        guid = "%s-%s" % (set_type, tokenization.convert_to_unicode(line[0]))
+        text_a = tokenization.convert_to_unicode(line[1])
+        text_b = tokenization.convert_to_unicode(line[2])
       else:
+        text_a = tokenization.convert_to_unicode(line[0])
+        text_b = tokenization.convert_to_unicode(line[1])
         label = tokenization.convert_to_unicode(line[2])
+        guid = "%s-%s" % (set_type, tokenization.convert_to_unicode(line[3]))
+
       examples.append(
           InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
     return examples
@@ -1021,15 +1026,13 @@ def main(_):
         drop_remainder=predict_drop_remainder)
 
     result = estimator.predict(input_fn=predict_input_fn)
-
+    tf.logging.info(predict_examples)
     output_predict_file = os.path.join(FLAGS.output_dir, "test_results.tsv")
     with tf.gfile.GFile(output_predict_file, "w") as writer:
       num_written_lines = 0
       tf.logging.info("***** Predict results *****")
       for (i, prediction) in enumerate(result):
         probabilities = prediction["probabilities"]
-
-        tf.logging.info(label_list[np.argmax(probabilities)])
         if i >= num_actual_predict_examples:
           break
         output_line = "\t".join(
@@ -1041,6 +1044,16 @@ def main(_):
 
     if FLAGS.do_kaggle_submission:
       tf.logging.info("***** Creating Kaggle Submission *****")
+
+      with open(os.path.join(FLAGS.output_dir, "kaggle_submission.csv"), mode='w') as sub_file:
+          writer = csv.writer(employee_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+          writer.writerow(['id', 'label1'])
+
+          for (i, prediction) in enumerate(result):
+            probabilities = prediction["probabilities"]
+            label_predicted = label_list[np.argmax(probabilities)]
+            id = predict_examples["guid"].split('-')[1]
+            writer.writerow([id, label_predicted])
 
 
 if __name__ == "__main__":

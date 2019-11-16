@@ -1039,7 +1039,7 @@ def main(_):
     if FLAGS.do_kaggle_submission:
       tf.logging.info("***** Creating Kaggle Submission *****")
       for (i, prediction) in enumerate(result):
-          print(probabilities)
+          print(prediction)
 
 
 if __name__ == "__main__":

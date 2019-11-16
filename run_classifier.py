@@ -1027,6 +1027,7 @@ def main(_):
       tf.logging.info("***** Predict results *****")
       for (i, prediction) in enumerate(result):
         probabilities = prediction["probabilities"]
+        tf.logging.info(probabilities)
         if i >= num_actual_predict_examples:
           break
         output_line = "\t".join(

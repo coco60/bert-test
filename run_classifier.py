@@ -25,6 +25,7 @@ import modeling
 import optimization
 import tokenization
 import tensorflow as tf
+import numpy as np
 
 flags = tf.flags
 
@@ -1027,7 +1028,8 @@ def main(_):
       tf.logging.info("***** Predict results *****")
       for (i, prediction) in enumerate(result):
         probabilities = prediction["probabilities"]
-        tf.logging.info(probabilities)
+
+        tf.logging.info(label_list[np.argmax(probabilities, axis=1)])
         if i >= num_actual_predict_examples:
           break
         output_line = "\t".join(
@@ -1039,9 +1041,6 @@ def main(_):
 
     if FLAGS.do_kaggle_submission:
       tf.logging.info("***** Creating Kaggle Submission *****")
-      print(result)
-      for (i, prediction) in enumerate(result):
-          print(prediction["probabilities"])
 
 
 if __name__ == "__main__":

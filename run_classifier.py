@@ -1040,7 +1040,7 @@ def main(_):
       tf.logging.info("***** Creating Kaggle Submission *****")
       print(result)
       for (i, prediction) in enumerate(result):
-          print(i + " " + prediction +"\n")
+          print(prediction["probabilities"])
 
 
 if __name__ == "__main__":

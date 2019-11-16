@@ -1052,7 +1052,7 @@ def main(_):
           for (i, prediction) in enumerate(result):
             probabilities = prediction["probabilities"]
             label_predicted = label_list[np.argmax(probabilities)]
-            id = predict_examples["guid"].split('-')[1]
+            id = predict_examples[i].guid.split('-')[1]
             writer.writerow([id, label_predicted])
 
 

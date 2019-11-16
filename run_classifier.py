@@ -1029,7 +1029,7 @@ def main(_):
       for (i, prediction) in enumerate(result):
         probabilities = prediction["probabilities"]
 
-        tf.logging.info(label_list[np.argmax(probabilities, axis=1)])
+        tf.logging.info(label_list[np.argmax(probabilities)])
         if i >= num_actual_predict_examples:
           break
         output_line = "\t".join(

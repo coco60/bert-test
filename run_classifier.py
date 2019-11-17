@@ -76,10 +76,16 @@ flags.DEFINE_bool(
     "do_predict", False,
     "Whether to run the model in inference mode on the test set.")
 
+#################################################
 ############## ADD FOR THE PROJECT ##############
+#################################################
+
 flags.DEFINE_bool(
     "do_kaggle_submission", False,
     "Whether to create the kaggle submission.")
+
+#################################################
+#################################################
 #################################################
 
 flags.DEFINE_integer("train_batch_size", 32, "Total batch size for training.")
@@ -151,11 +157,17 @@ class InputExample(object):
     self.text_b = text_b
     self.label = label
 
+#################################################
 ############## ADD FOR THE PROJECT ##############
+#################################################
+
 csv.register_dialect('myDialect',
 delimiter = ',',
 quoting=csv.QUOTE_ALL,
 skipinitialspace=True)
+
+#################################################
+#################################################
 #################################################
 
 class PaddingInputExample(object):
@@ -216,7 +228,10 @@ class DataProcessor(object):
         lines.append(line)
       return lines
 
+#################################################
 ############## ADD FOR THE PROJECT ##############
+#################################################
+
   def _read_csv(cls, input_file):
       with tf.gfile.Open(input_file, "r") as f:
           reader = csv.reader(f, dialect='myDialect')
@@ -224,7 +239,10 @@ class DataProcessor(object):
           for line in reader:
             lines.append(line)
           return lines
-################################################
+
+#################################################
+#################################################
+#################################################
 
 class XnliProcessor(DataProcessor):
   """Processor for the XNLI data set."""
@@ -274,13 +292,16 @@ class XnliProcessor(DataProcessor):
     return ["contradiction", "entailment", "neutral"]
 
 
+#################################################
+############## ADD FOR THE PROJECT ##############
+#################################################
+
 class SnliProcessor(DataProcessor):
   """Processor for the MultiNLI data set (GLUE version)."""
 
   def get_train_examples(self, data_dir):
     """See base class."""
     return self._create_examples(
-        #self._read_tsv(os.path.join(data_dir, "train.tsv")), "train")
         self._read_csv(os.path.join(data_dir, "snli_train.csv")), "train")
 
   def get_dev_examples(self, data_dir):
@@ -292,7 +313,6 @@ class SnliProcessor(DataProcessor):
   def get_test_examples(self, data_dir):
     """See base class."""
     return self._create_examples(
-        #self._read_tsv(os.path.join(data_dir, "test.tsv")), "test")
         self._read_csv(os.path.join(data_dir, "snli_test.csv")), "test")
 
   def get_labels(self):
@@ -321,6 +341,9 @@ class SnliProcessor(DataProcessor):
           InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
     return examples
 
+#################################################
+#################################################
+#################################################
 
 class MnliProcessor(DataProcessor):
   """Processor for the MultiNLI data set (GLUE version)."""
@@ -1042,6 +1065,10 @@ def main(_):
         num_written_lines += 1
     assert num_written_lines == num_actual_predict_examples
 
+#################################################
+############## ADD FOR THE PROJECT ##############
+#################################################
+
     if FLAGS.do_kaggle_submission:
       tf.logging.info("***** Creating Kaggle Submission *****")
       result = estimator.predict(input_fn=predict_input_fn)
@@ -1055,6 +1082,9 @@ def main(_):
             id = predict_examples[i].guid.split('-')[1]
             writer.writerow([id, label_predicted])
 
+#################################################
+#################################################
+#################################################
 
 if __name__ == "__main__":
   flags.mark_flag_as_required("data_dir")
